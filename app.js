@@ -867,6 +867,12 @@ function refresh() {
 
 function newLeadFormHtml() {
   return `
+    <div class="wf-quick">
+      <div class="muted" style="margin-bottom:8px;">Quick start</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+        <button class="action-btn secondary" type="button" id="addSampleLeadsBtn">Add 4 sample leads</button>
+      </div>
+    </div>
     <form id="newLeadForm" class="wf-form">
       <div class="wf-form-row"><label>Name</label><input name="name" placeholder="Customer name" /></div>
       <div class="wf-form-row"><label>Phone</label><input name="phone" placeholder="(555) 555-5555" /></div>
@@ -904,7 +910,13 @@ function newLeadFormHtml() {
 function wireNewLeadModal() {
   const form = document.getElementById("newLeadForm");
   const cancelBtn = document.getElementById("cancelNewLead");
+  const addSamplesBtn = document.getElementById("addSampleLeadsBtn");
   cancelBtn.addEventListener("click", closeModal);
+  addSamplesBtn.addEventListener("click", () => {
+    addSampleLeads(4);
+    closeModal();
+    refresh();
+  });
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = new FormData(form);
@@ -936,6 +948,86 @@ function wireNewLeadModal() {
     refresh();
     selectLead(lead.id);
   });
+}
+
+function addSampleLeads(count) {
+  const now = nowIso();
+  const samples = [
+    {
+      contact: { name: "Jamie Rivera", phone: "+14105550811", email: "jamie.rivera@example.com" },
+      location: { address: "48 Bayview Ct", city: "Annapolis", state: "MD" },
+      jobType: "residential",
+      sqftEstimate: 120,
+      filmCategory: "decorative_basic",
+      goals: ["privacy", "looks"],
+      glass: { dualPane: null, lowE: null, notes: "Bathroom + front door sidelites. Wants bright frost." },
+      removalNeeded: false,
+      access: "ground",
+      notes: "Needs install this week; prefers morning."
+    },
+    {
+      contact: { name: "Sutton Property Mgmt", phone: "+14435550777", email: "ops@suttonpm.example.com" },
+      location: { address: "200 Commerce Park", city: "Columbia", state: "MD" },
+      jobType: "commercial",
+      sqftEstimate: 950,
+      filmCategory: "solar_exterior",
+      goals: ["heat", "glare"],
+      glass: { dualPane: null, lowE: null, notes: "South-facing office wall. Wants minimal mirror look." },
+      removalNeeded: null,
+      access: "interior access; 2nd floor; ladder likely",
+      notes: "COI required. Can only work after 6pm or weekends."
+    },
+    {
+      contact: { name: "Chris Park", phone: "+14105550992", email: "chris.park@example.com" },
+      location: { address: "17 W Lombard St", city: "Baltimore", state: "MD" },
+      jobType: "residential",
+      sqftEstimate: 210,
+      filmCategory: "safety_security_8mil",
+      goals: ["safety"],
+      glass: { dualPane: null, lowE: null, notes: "Recent break-in attempt. Wants clear safety film." },
+      removalNeeded: false,
+      access: "ground + step ladder",
+      notes: "Wants the strongest option without changing appearance."
+    },
+    {
+      contact: { name: "Mina Retail", phone: "+14105550666", email: "manager@minaretail.example.com" },
+      location: { address: "88 Fleet St", city: "Baltimore", state: "MD" },
+      jobType: "commercial",
+      sqftEstimate: 320,
+      filmCategory: "anti_graffiti",
+      goals: ["looks", "safety"],
+      glass: { dualPane: null, lowE: null, notes: "Street-level storefront. Wants sacrificial layer." },
+      removalNeeded: true,
+      access: "street-level; parking is tight",
+      notes: "Must keep store open during install if possible."
+    }
+  ];
+
+  const toAdd = samples.slice(0, Math.max(1, Math.min(samples.length, count)));
+  for (const s of toAdd) {
+    const createdAt = now;
+    const lead = reScoreLead({
+      id: newId("lead"),
+      createdAt,
+      updatedAt: createdAt,
+      status: "NEW",
+      source: "example",
+      contact: { name: s.contact.name, phone: normalizePhone(s.contact.phone), email: normalizeEmail(s.contact.email) },
+      location: s.location,
+      jobType: s.jobType,
+      sqftEstimate: s.sqftEstimate,
+      filmCategory: s.filmCategory,
+      goals: s.goals,
+      glass: s.glass,
+      removalNeeded: s.removalNeeded,
+      access: s.access,
+      notes: s.notes,
+      tags: ["sample"],
+      history: [{ at: createdAt, type: "LEAD_CREATED", by: "system", detail: { source: "example" } }]
+    });
+    state.db.leads.push(lead);
+  }
+  saveDb(state.db);
 }
 
 function exportDb() {
