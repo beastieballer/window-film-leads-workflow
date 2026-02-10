@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Window Film — Leads to Workflow Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./windowfilm.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <h1>
+            Window Film — <span class="glow">Leads → Workflow</span><span class="live-dot" aria-hidden="true"></span>
+          </h1>
+          <p class="last-updated">
+            Local prototype · Stores data in <span class="mono">localStorage</span> · <span id="timestamp"></span>
+          </p>
+        </div>
+        <div class="header-actions">
+          <button class="refresh-btn" id="newLeadBtn" type="button">+ New Lead</button>
+          <button class="refresh-btn secondary" id="exportBtn" type="button">Export</button>
+          <button class="refresh-btn secondary" id="importBtn" type="button">Import</button>
+          <button class="refresh-btn secondary" id="refreshBtn" type="button">⟳ Refresh</button>
+        </div>
+      </header>
+
+      <div class="wf-layout">
+        <aside class="wf-sidebar card">
+          <div class="wf-sidebar-header">
+            <h2>Leads</h2>
+            <div class="muted" id="leadCount">—</div>
+          </div>
+          <div id="leadsList" class="wf-leads-list"></div>
+        </aside>
+
+        <main class="wf-main">
+          <section class="card wf-detail">
+            <div class="wf-detail-header">
+              <div>
+                <h2 id="leadTitle">Select a lead</h2>
+                <div class="muted" id="leadMeta">—</div>
+              </div>
+              <div class="wf-actions">
+                <button class="action-btn" id="createFollowupsBtn" type="button" disabled>Create follow-ups</button>
+                <button class="action-btn secondary" id="ballparkBtn" type="button" disabled>Generate ballpark</button>
+                <button class="action-btn secondary" id="proposalBtn" type="button" disabled>Generate proposal</button>
+                <button class="action-btn secondary" id="draftReplyBtn" type="button" disabled>Draft reply</button>
+              </div>
+            </div>
+
+            <div id="leadDetailBody" class="wf-detail-body">
+              <p class="muted">Click a lead on the left to view details and generate quotes/messages.</p>
+            </div>
+          </section>
+
+          <section class="grid wf-grid">
+            <div class="card">
+              <h2>Tasks</h2>
+              <div id="tasksList" class="wf-list"></div>
+            </div>
+            <div class="card">
+              <h2>Quotes</h2>
+              <div id="quotesList" class="wf-list"></div>
+            </div>
+            <div class="card">
+              <h2>Message drafts</h2>
+              <div id="messagesList" class="wf-list"></div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="close-btn" id="closeModalBtn" aria-label="Close modal">&times;</button>
+        <h2 id="modalTitle"></h2>
+        <div class="modal-content">
+          <div id="modalBody"></div>
+        </div>
+        <div class="modal-actions">
+          <button class="action-btn" id="copyBtn" type="button">Copy</button>
+          <button class="action-btn secondary" id="closeBtn" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
