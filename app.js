@@ -82,6 +82,7 @@ const els = {
   quotesList: document.getElementById("quotesList"),
   messagesList: document.getElementById("messagesList"),
   newLeadBtn: document.getElementById("newLeadBtn"),
+  seedLeadsBtn: document.getElementById("seedLeadsBtn"),
   exportBtn: document.getElementById("exportBtn"),
   importBtn: document.getElementById("importBtn"),
   refreshBtn: document.getElementById("refreshBtn"),
@@ -916,16 +917,7 @@ function wireNewLeadModal() {
     addSamplesBtn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const result = addSampleLeads(4);
-      const firstId = result.ids?.[0] ?? null;
-      closeModal();
-      refresh();
-      if (firstId) selectLead(firstId);
-      openModal({
-        title: "Sample leads added",
-        bodyHtml: `<p class="muted">Added <strong>${result.created}</strong> sample leads.</p>`,
-        copyText: ""
-      });
+      addSamplesAndNotify();
     });
   }
   form.addEventListener("submit", (e) => {
@@ -1044,6 +1036,19 @@ function addSampleLeads(count) {
   return { created: createdIds.length, ids: createdIds };
 }
 
+function addSamplesAndNotify() {
+  const result = addSampleLeads(4);
+  const firstId = result.ids?.[0] ?? null;
+  closeModal();
+  refresh();
+  if (firstId) selectLead(firstId);
+  openModal({
+    title: "Sample leads added",
+    bodyHtml: `<p class="muted">Added <strong>${result.created}</strong> sample leads.</p>`,
+    copyText: ""
+  });
+}
+
 function exportDb() {
   const blob = new Blob([JSON.stringify(state.db, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
@@ -1083,6 +1088,9 @@ els.newLeadBtn.addEventListener("click", () => {
   openModal({ title: "New lead", bodyHtml: newLeadFormHtml(), copyText: "" });
   wireNewLeadModal();
 });
+if (els.seedLeadsBtn) {
+  els.seedLeadsBtn.addEventListener("click", () => addSamplesAndNotify());
+}
 els.refreshBtn.addEventListener("click", refresh);
 els.exportBtn.addEventListener("click", exportDb);
 els.importBtn.addEventListener("click", importDbPrompt);
