@@ -386,13 +386,38 @@ function buildProposalHtml({ lead, quote }) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Window Film Proposal</title>
   <style>
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin:40px; color:#0b1220;}
-    h1{margin:0 0 4px 0;}
-    .muted{color:#556; font-size:14px;}
-    .card{border:1px solid #dde; border-radius:12px; padding:16px; margin:14px 0;}
-    table{width:100%; border-collapse:collapse;}
-    td,th{padding:8px 10px; border-bottom:1px solid #eef;}
-    .total{font-size:18px;}
+    :root{
+      --text:#111827;
+      --muted:#4b5563;
+      --border:#e5e7eb;
+      --bg:#ffffff;
+      --card:#f9fafb;
+      --accent:#111827;
+    }
+    body{
+      font-family: "Inter", "Segoe UI", "Roboto", "Arial", sans-serif;
+      margin:40px;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.55;
+      font-size:15px;
+    }
+    h1{margin:0 0 6px 0; font-size:26px; letter-spacing:-0.2px;}
+    .muted{color:var(--muted); font-size:13px;}
+    .card{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:18px;
+      margin:14px 0;
+      background:var(--card);
+    }
+    table{width:100%; border-collapse:collapse; font-size:14px;}
+    th{color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-size:11px;}
+    td,th{padding:10px 12px; border-bottom:1px solid #edf2f7;}
+    .total{font-size:20px; font-weight:700;}
+    .section-title{font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:8px;}
+    ul{margin:8px 0 0 18px;}
+    li{margin:6px 0;}
   </style>
 </head>
 <body>
