@@ -912,11 +912,22 @@ function wireNewLeadModal() {
   const cancelBtn = document.getElementById("cancelNewLead");
   const addSamplesBtn = document.getElementById("addSampleLeadsBtn");
   cancelBtn.addEventListener("click", closeModal);
-  addSamplesBtn.addEventListener("click", () => {
-    addSampleLeads(4);
-    closeModal();
-    refresh();
-  });
+  if (addSamplesBtn) {
+    addSamplesBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const result = addSampleLeads(4);
+      const firstId = result.ids?.[0] ?? null;
+      closeModal();
+      refresh();
+      if (firstId) selectLead(firstId);
+      openModal({
+        title: "Sample leads added",
+        bodyHtml: `<p class="muted">Added <strong>${result.created}</strong> sample leads.</p>`,
+        copyText: ""
+      });
+    });
+  }
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const data = new FormData(form);
@@ -1004,6 +1015,7 @@ function addSampleLeads(count) {
   ];
 
   const toAdd = samples.slice(0, Math.max(1, Math.min(samples.length, count)));
+  const createdIds = [];
   for (const s of toAdd) {
     const createdAt = now;
     const lead = reScoreLead({
@@ -1026,8 +1038,10 @@ function addSampleLeads(count) {
       history: [{ at: createdAt, type: "LEAD_CREATED", by: "system", detail: { source: "example" } }]
     });
     state.db.leads.push(lead);
+    createdIds.push(lead.id);
   }
   saveDb(state.db);
+  return { created: createdIds.length, ids: createdIds };
 }
 
 function exportDb() {
